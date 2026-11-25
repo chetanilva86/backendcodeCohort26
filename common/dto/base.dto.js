@@ -3,12 +3,7 @@ import joi from "joi"
 class basedto {
 static schema = joi.object({})
 
-static schema = joi.object({
-    name:joi.string().trim().min(2).max(50).required(),
-    email:joi.string().trim().min(2).max(50).required(),
-    password:joi.string().trim().min(2).max(50).required(),
-    role:joi.string().valid("customer","seller").default("customer"),
-})
+
 
 static validate (data){
    const {error,value} =  this.schema.validate(data,{

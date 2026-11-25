@@ -1,5 +1,6 @@
 import { boolean } from "joi";
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 const userSchema = new  mongoose.Schema({
 name:{
     type:String,
@@ -38,6 +39,16 @@ resetpasswordtoken:{type:string,select:false},
 resetpasswordExpires:{type:string,select:false}
 },{timestamps:true})
 
+userSchema.pre("save", async  function(next){
+if (!this.isModified("password")) {
+    return next()
+}
+this.password = await bcrypt.hash(this.password,6)
+next()
+})
 
+userSchema.method.comparePassword = async function (cleartextpassword){
+   return bcrypt.compare(cleartextpassword,this.password)
+}
 
 export default mongoose.model("User",userSchema);
